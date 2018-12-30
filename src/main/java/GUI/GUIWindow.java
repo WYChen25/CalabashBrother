@@ -1,6 +1,7 @@
 package GUI;
 
 import Formations.*;
+import Source.BattleRecord;
 import Source.Global;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 
 
@@ -24,9 +26,11 @@ public class GUIWindow extends Application{
     //MARK:Properties
 
     /*help properties*/
+    public static boolean displayFlag = false;
     boolean beginFlag = false;
     boolean endFlag = false;
     int rounder = 0;
+    Stage stage;
 
     /* Label */
     Label label = new Label();
@@ -37,7 +41,6 @@ public class GUIWindow extends Application{
     /* menuBar-file */
     Menu fileMenu = new Menu("file");
     MenuItem recordItem = new MenuItem("save file");
-    MenuItem beginItem = new MenuItem("begin game");
     MenuItem readItem = new MenuItem("read file");
 
     /* menuBar-file-battleCalabashBrother */
@@ -75,6 +78,29 @@ public class GUIWindow extends Application{
     private void addActions(){
         addBroActions();
         addMonActions();
+        addFileActions();
+    }
+
+    /* set file actions */
+    private void addFileActions(){
+        recordItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(beginFlag)
+                    return;
+                Global.battleRecord.saveFile(stage);
+            }
+        });
+
+        readItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(beginFlag)
+                    return;
+                Global.battleRecord.readFile(stage);
+                displayFlag = true;
+            }
+        });
     }
 
     /* set bro actions */
@@ -261,7 +287,6 @@ public class GUIWindow extends Application{
         //file menu init;
         fileMenu.getItems().add(readItem);
         fileMenu.getItems().add(recordItem);
-        fileMenu.getItems().add(beginItem);
         menuBar.getMenus().add(fileMenu);
 
         //battleMenu init;
@@ -357,6 +382,9 @@ public class GUIWindow extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        this.stage = primaryStage;
+
         //init border pane;
         BorderPane borderPane = new BorderPane();
         borderPane.setPrefSize(1000,600);
@@ -387,6 +415,9 @@ public class GUIWindow extends Application{
             public void handle(KeyEvent event) {
 
                 if(event.getCode() == KeyCode.SPACE) {
+                    if(displayFlag == true)
+                        return;
+                    Global.battleRecord.clear();
                     if(endFlag == true){
                         if(Global.grandFather.getPos_y() == 0 && Global.grandFather.getPos_x() == 0){
                             QueueFour broQue = new QueueFour(true);
@@ -398,6 +429,7 @@ public class GUIWindow extends Application{
                         return;
                     }
                     if(!beginFlag) {
+                        Global.battleRecord.addRecord(rounder);
                         Global.game.start();
                         beginFlag = true;
                         label.setText("Game Begin,Press Enter to continue");
@@ -407,6 +439,8 @@ public class GUIWindow extends Application{
                     }
                 }
                 else if(event.getCode() == KeyCode.ENTER) {
+                    if(displayFlag == true)
+                        return;
                     if(!beginFlag) {
                         label.setText("press space to begin game");
                         return;
@@ -414,6 +448,7 @@ public class GUIWindow extends Application{
                     if(Global.isHuluFailed()){
                         label.setText("Monster Win,choose a formation and Press space key to init");
                         repaintMap();
+                        Global.battleRecord.addRecord(rounder);
                         beginFlag = false;
                         endFlag = true;
                         rounder = 0;
@@ -422,6 +457,7 @@ public class GUIWindow extends Application{
                     else if(Global.isMonFailed()){
                         label.setText("Huluwa Win,choose a formation and Press space key to init");
                         repaintMap();
+                        Global.battleRecord.addRecord(rounder);
                         beginFlag = false;
                         endFlag = true;
                         rounder = 0;
@@ -429,10 +465,21 @@ public class GUIWindow extends Application{
                     }
                     else {
                         repaintMap();
+                        Global.battleRecord.addRecord(rounder);
                         Global.game.roundTime();
                         rounder++;
                         label.setText("rounder"+rounder);
                     }
+                }
+                else if(event.getCode() == KeyCode.A){
+                    if(!displayFlag)
+                        return;
+                    try {
+                        BattleRecord.showRecord(Global.battleRecord.reader);
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+
                 }
             }
 

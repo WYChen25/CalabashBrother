@@ -91,7 +91,6 @@ public class Map {
                             if(positions[newX][newY].isEmpty()) {
                                 positions[oldX][oldY].reSetCreature();
                                 positions[newX][newY].setCreature(creature);
-                                System.out.println("move creature from"+oldX+","+oldY+"to"+newX+","+newY);
                                 //GUIWindow.moveCreature(creature,oldX,oldY,newX,newY);
                                 flag = true;
                             }else{
@@ -104,7 +103,7 @@ public class Map {
                                     positions[newX][newY].getCreature().setDead();
                                     //positions[oldX][oldY].reSetCreature();
                                     //positions[newX][newY].setCreature(creature);
-                                    System.out.println("move creature from"+oldX+","+oldY+"to"+newX+","+newY);
+
                                     flag = false;
                                 }
                                 else {flag = false;}
@@ -120,5 +119,6 @@ public class Map {
         }
         return flag;
     }
+
 
 }

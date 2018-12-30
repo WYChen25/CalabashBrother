@@ -54,30 +54,39 @@ public class GrandFatherThread implements Runnable {
         boolean flag = false;
         pos_x = grandFather.getPos_x();
         pos_y = grandFather.getPos_y();
+        int count = 0;
 
         //向某一可以移动的方向移动，或有可能原地不动；
-        switch (i){
-            case 0:{
-                flag = Global.map.moveCreature(pos_x,pos_y,pos_x+1,pos_y);
-                if(flag)
-                    break;
-                i++;
-            }
-            case 1:{
-                flag = Global.map.moveCreature(pos_x,pos_y,pos_x,pos_y+1);
-                if(flag)
-                    break;
-                i++;
-            }
-            case 2:{
-                flag = Global.map.moveCreature(pos_x,pos_y,pos_x-1,pos_y);
-                if(flag)
-                    break;
-                i++;
-            }
-            case 3:{
-                flag = Global.map.moveCreature(pos_x,pos_y,pos_x,pos_y-1);
-                break;
+        while(count < 4 && !flag) {
+            switch (i) {
+                case 0: {
+                    flag = Global.map.moveCreature(pos_x, pos_y, pos_x + 1, pos_y);
+                    if (flag || count == 4)
+                        break;
+                    i++;
+                    count++;
+                }
+                case 1: {
+                    flag = Global.map.moveCreature(pos_x, pos_y, pos_x, pos_y + 1);
+                    if (flag || count == 4)
+                        break;
+                    i++;
+                    count++;
+                }
+                case 2: {
+                    flag = Global.map.moveCreature(pos_x, pos_y, pos_x - 1, pos_y);
+                    if (flag || count == 4)
+                        break;
+                    i++;
+                    count++;
+                }
+                case 3: {
+                    flag = Global.map.moveCreature(pos_x, pos_y, pos_x, pos_y - 1);
+                    if (flag || count == 4)
+                        break;
+                    i = 0;
+                    count++;
+                }
             }
         }
     }

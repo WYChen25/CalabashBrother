@@ -58,6 +58,8 @@ public class Creature {
 
     public void setDead(){
         isDead = true;
+        pos_x = 0;
+        pos_y = 0;
     }
 
     public boolean isFriend(){

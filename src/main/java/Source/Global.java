@@ -4,6 +4,8 @@ import Creatures.*;
 import Formations.Map;
 import Thread.Game;
 
+import java.util.concurrent.Semaphore;
+
 public final class Global {
 
     //MARK:Properties;
@@ -38,6 +40,12 @@ public final class Global {
 
     //游戏单元
     public static final Game game = new Game();
+
+    //游戏纪录
+    public static BattleRecord battleRecord = new BattleRecord();
+
+    //游戏文件标志符：
+    public static String identify = "Calabash - wyc@040912";
 
 
     //MARK: function
