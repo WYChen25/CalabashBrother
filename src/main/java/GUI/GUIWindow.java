@@ -98,6 +98,7 @@ public class GUIWindow extends Application{
                 if(beginFlag)
                     return;
                 Global.battleRecord.readFile(stage);
+                label.setText("display begin,press A to continue");
                 displayFlag = true;
             }
         });
@@ -475,7 +476,12 @@ public class GUIWindow extends Application{
                     if(!displayFlag)
                         return;
                     try {
-                        BattleRecord.showRecord(Global.battleRecord.reader);
+                        int round = BattleRecord.showRecord(Global.battleRecord.reader);
+                        label.setText("rounder"+round);
+                        if(round == 0 && displayFlag == false){
+                            label.setText("display end,restart the game");
+                            Global.creatureInit();
+                        }
                     }catch (IOException e){
                         e.printStackTrace();
                     }

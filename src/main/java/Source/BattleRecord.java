@@ -144,17 +144,17 @@ public class BattleRecord {
 
     }
 
-    public static void showRecord(BufferedReader reader) throws IOException{
+    public static int showRecord(BufferedReader reader) throws IOException{
         String tempStr;
+        int rounder = 0;
         if ((tempStr=reader.readLine())!= null){
 
             Global.map.clearMap();
-            int rounder = Integer.parseInt(tempStr);
+            rounder = Integer.parseInt(tempStr);
             //System.out.println(tempStr);
             tempStr = reader.readLine();
             //System.out.println(tempStr);
             String[] temp1 = tempStr.split("\\s");
-            System.out.println();
             for(int i = 0; i < 21; i+=3){
                 int x = Integer.parseInt(temp1[i+1]);
                 int y = Integer.parseInt(temp1[i+2]);
@@ -197,5 +197,6 @@ public class BattleRecord {
         else {
             GUIWindow.displayFlag = false;
         }
+        return rounder;
     }
 }
